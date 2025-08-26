@@ -2,8 +2,15 @@
 
 import React, { useState } from "react";
 
+type User = {
+  companyName: string;
+  email: string;
+  password: string;
+  mobile: string;
+};
+
 function AuthForm({ isRegistering }: { isRegistering: boolean }) {
-  const [userData, setUserData] = useState({
+  const [userData, setUserData] = useState<User>({
     companyName: "",
     email: "",
     password: "",
@@ -14,17 +21,18 @@ function AuthForm({ isRegistering }: { isRegistering: boolean }) {
     e.preventDefault();
     console.log(userData);
 
-    const storedUsers = JSON.parse(localStorage.getItem("users") || "[]");
+    const storedUsers: User[] = JSON.parse(localStorage.getItem("users") || "[]");
+
     const existingUser = storedUsers.find(
-      (user) => user.mobile === userData.mobile
+      (user: User) => user.mobile === userData.mobile
     );
 
     if (isRegistering) {
       if (
-        userData.companyName === "" ||
-        userData.email === "" ||
-        userData.mobile === "" ||
-        userData.password === ""
+        !userData.companyName ||
+        !userData.email ||
+        !userData.mobile ||
+        !userData.password
       ) {
         return alert("Please add all fields");
       }
@@ -37,7 +45,7 @@ function AuthForm({ isRegistering }: { isRegistering: boolean }) {
         alert("User registered successfully!");
       }
     } else {
-      if (userData.mobile === "" || userData.password === "") {
+      if (!userData.mobile || !userData.password) {
         return alert("Please add all fields");
       }
 
