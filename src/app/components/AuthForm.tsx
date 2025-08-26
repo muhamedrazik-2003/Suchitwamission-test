@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-function AuthForm({ isRegistering }) {
+function AuthForm({ isRegistering }: { isRegistering: boolean }) {
   const [userData, setUserData] = useState({
     companyName: "",
     email: "",
@@ -11,50 +11,50 @@ function AuthForm({ isRegistering }) {
   });
 
   const handleSubmit = (e) => {
+    e.preventDefault();
     console.log(userData);
-    const storedUsers = JSON.parse(localStorage.getItem("users") || "[]");
 
+    const storedUsers = JSON.parse(localStorage.getItem("users") || "[]");
     const existingUser = storedUsers.find(
       (user) => user.mobile === userData.mobile
     );
+
     if (isRegistering) {
-        if (
-      userData.companyName === "" ||
-      userData.email === "" ||
-      userData.mobile === "" ||
-      userData.password === ""
-    ) {
-      return alert("please Add All Fields");
-    }
+      if (
+        userData.companyName === "" ||
+        userData.email === "" ||
+        userData.mobile === "" ||
+        userData.password === ""
+      ) {
+        return alert("Please add all fields");
+      }
 
       if (existingUser) {
-        alert("User Already Exist");
+        alert("User already exists");
       } else {
         storedUsers.push(userData);
-
         localStorage.setItem("users", JSON.stringify(storedUsers));
-        alert("User Registered Successfully!");
+        alert("User registered successfully!");
       }
     } else {
-        if (
-      userData.mobile === "" ||
-      userData.password === ""
-    ) {
-      return alert("please Add All Fields");
-    }
+      if (userData.mobile === "" || userData.password === "") {
+        return alert("Please add all fields");
+      }
 
-         if (existingUser.password === userData.password) {
-      alert("User  Login Successfull");
-    } else {
-      alert("User Login Failed!");
-    }
+      if (!existingUser) {
+        alert("User not found!");
+      } else if (existingUser.password === userData.password) {
+        alert("User login successful");
+      } else {
+        alert("Incorrect password!");
+      }
     }
   };
 
   return (
     <div className="bg-white rounded-3xl text-center space-y-5 px-[30px] py-5 shadow-2xl w-[340px]">
       {isRegistering ? <h3>New Registration</h3> : <h3>Login</h3>}
-      <form action="" className="space-y-5" onSubmit={(e) => handleSubmit(e)}>
+      <form action="" className="space-y-5" onSubmit={handleSubmit}>
         <div className="space-y-5">
           {isRegistering && (
             <input
@@ -75,7 +75,7 @@ function AuthForm({ isRegistering }) {
               setUserData({ ...userData, mobile: e.target.value })
             }
             className="py-2 px-6  w-full border border-gray-300 rounded-sm"
-            placeholder="mobile Number"
+            placeholder="Mobile Number"
             required
           />
           {isRegistering && (

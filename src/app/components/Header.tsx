@@ -2,7 +2,13 @@ import React from "react";
 import Image from "next/image";
 import { UserCircle } from "lucide-react";
 
-function Header({isRegistering, setIsRegistering}) {
+function Header({
+  isRegistering,
+  setIsRegistering,
+}: {
+  isRegistering: boolean;
+  setIsRegistering: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   return (
     <header className="flex items-center justify-between mx-[100px] mt-[40px]">
       <Image
