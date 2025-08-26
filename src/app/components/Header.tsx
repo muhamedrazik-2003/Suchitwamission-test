@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { UserCircle } from "lucide-react";
 
-function Header() {
+function Header({isRegistering, setIsRegistering}) {
   return (
     <header className="flex items-center justify-between mx-[100px] mt-[40px]">
       <Image
@@ -20,9 +20,11 @@ function Header() {
             <li>How it Works?</li>
           </ul>
         </nav>
-        <button className="flex items-center gap-1 bg-green-500 text-white px-4 py-3 rounded-lg">
+        <button onClick={() => setIsRegistering(!isRegistering)} className="flex items-center gap-1 bg-green-500 text-white px-4 py-3 rounded-lg">
             <UserCircle/>
-            Register/Login
+            {
+                isRegistering ? "Login" : "Register"
+            }
         </button>
         <div className="p-1 px-2.5 border rounded-full">
           മ

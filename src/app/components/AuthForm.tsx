@@ -1,33 +1,110 @@
-import React from "react";
+"use client";
 
-function AuthForm() {
+import React, { useState } from "react";
+
+function AuthForm({ isRegistering }) {
+  const [userData, setUserData] = useState({
+    companyName: "",
+    email: "",
+    password: "",
+    mobile: "",
+  });
+
+  const handleSubmit = (e) => {
+    console.log(userData);
+    const storedUsers = JSON.parse(localStorage.getItem("users") || "[]");
+
+    const existingUser = storedUsers.find(
+      (user) => user.mobile === userData.mobile
+    );
+    if (isRegistering) {
+        if (
+      userData.companyName === "" ||
+      userData.email === "" ||
+      userData.mobile === "" ||
+      userData.password === ""
+    ) {
+      return alert("please Add All Fields");
+    }
+
+      if (existingUser) {
+        alert("User Already Exist");
+      } else {
+        storedUsers.push(userData);
+
+        localStorage.setItem("users", JSON.stringify(storedUsers));
+        alert("User Registered Successfully!");
+      }
+    } else {
+        if (
+      userData.mobile === "" ||
+      userData.password === ""
+    ) {
+      return alert("please Add All Fields");
+    }
+
+         if (existingUser.password === userData.password) {
+      alert("User  Login Successfull");
+    } else {
+      alert("User Login Failed!");
+    }
+    }
+  };
+
   return (
     <div className="bg-white rounded-3xl text-center space-y-5 px-[30px] py-5 shadow-2xl w-[340px]">
-      <h3>New Registration</h3>
-      <form action="" className="space-y-5">
+      {isRegistering ? <h3>New Registration</h3> : <h3>Login</h3>}
+      <form action="" className="space-y-5" onSubmit={(e) => handleSubmit(e)}>
         <div className="space-y-5">
+          {isRegistering && (
+            <input
+              type="text"
+              onChange={(e) =>
+                setUserData({ ...userData, companyName: e.target.value })
+              }
+              className="py-2 px-6 w-full border border-gray-300 rounded-sm"
+              placeholder="Name of Company"
+              required
+              minLength={4}
+            />
+          )}
+
           <input
             type="text"
-            className="py-2 px-6 w-full border border-gray-300 rounded-sm"
-            placeholder="Name of Company"
-          />
-          <input
-            type="text"
+            onChange={(e) =>
+              setUserData({ ...userData, mobile: e.target.value })
+            }
             className="py-2 px-6  w-full border border-gray-300 rounded-sm"
             placeholder="mobile Number"
+            required
           />
-          <input
-            type="email"
-            className="py-2 px-6  w-full border border-gray-300 rounded-sm"
-            placeholder="Email"
-          />
+          {isRegistering && (
+            <input
+              type="email"
+              onChange={(e) =>
+                setUserData({ ...userData, email: e.target.value })
+              }
+              className="py-2 px-6  w-full border border-gray-300 rounded-sm"
+              placeholder="Email"
+              required
+            />
+          )}
+
           <input
             type="password"
+            onChange={(e) =>
+              setUserData({ ...userData, password: e.target.value })
+            }
             className="py-2 px-6  w-full border border-gray-300 rounded-sm"
             placeholder="Password"
+            required
+            minLength={4}
+            maxLength={8}
           />
         </div>
-        <button className="bg-green-700 py-2 px-6 rounded-lg text-white w-full">Submit</button>
+        <button className="bg-green-700 py-2 px-6 rounded-lg text-white w-full">
+          Submit
+        </button>
       </form>
     </div>
   );
